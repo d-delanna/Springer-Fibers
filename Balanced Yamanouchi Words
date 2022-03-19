@@ -1,0 +1,15 @@
+word_bank_2 = [
+    'bbmmtt', 'bmtbmt', 'bmbmtt', 'bmbtmt'
+]
+
+word_bank_3 = [   
+    'bbbmmmttt','bbbmmtmtt','bbbmtmmtt','bbbmtmtmt','bbbmmttmt',
+    'bbmmbmttt','bbmmttbmt','bbmmbttmt','bbmmbtmtt','bbmmtbmtt',
+    'bbmmtbtmt','bbmbmtmtt','bbmbmttmt','bbmbtmmtt','bbmbtmtmt',
+    'bbmtbmmtt','bbmtbmtmt','bbmtmbmtt','bbmtmbtmt','bbmtmtbmt',
+    'bmbbmmttt','bmbbmtmtt','bmbbmttmt','bmbbtmmtt','bmbbmttmt',
+    'bmbbtmmtt','bmbbtmtmt','bmbmbmttt','bmbmbtmtt','bmbmbttmt',
+    'bmbmtbmtt','bmbmtbtmt','bmbmttbmt','bmbtbmmtt','bmbtbmtmt',
+    'bmbtbmtmt','bmbtmbmtt','bmbtmtbmt','bmtbbmmtt','bmtbbmtmt',
+    'bmtbmbmtt','bmtbmbtmt','bmtbbmtmt'
+]
