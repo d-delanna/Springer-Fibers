@@ -9,8 +9,8 @@ class LinearSystem:
         """ Changes soln from type(sage.symbolic.expressions) to type(dict). """
         var_dictionary = dict()
         for equation in soln[0]:
-            equation = str(equation).split(" == ")
             try:
+                equation = str(equation).split(" == ")
                 var_dictionary[var(equation[0])] = int(equation[1])  # TODO: change to float
             except ValueError:
                 var_dictionary[var(equation[0])] = equation[1]  # TODO: change to var
@@ -79,9 +79,9 @@ class ArcMatrix:
     """ Produces square matrix M with entries determined by the given arc diagram.
     NOTE: M is the transpose of the matrix of mathematical interst. """
     def __init__(self, arc_diagram):
-        self.arc_diagram = Matrix(arc_diagram).T
-        self.num_sec = self.arc_diagram.nrows()  # number of sections
-        self.dim = self.num_sec ** 2  # dimension of M
+        self.arc_diagram = Matrix(arc_diagram)
+        self.nrows, self.ncols = self.arc_diagram.nrows(), self.arc_diagram.ncols()
+        self.dim = self.nrows * self.ncols  # dimension of M
         self.one_coords = self.__determine_one_coords()  # (i, j) locations of 1
         self.var_idx = 0  # subscript of variables
         self.M = self.__gen_arc_mat()
@@ -89,22 +89,22 @@ class ArcMatrix:
     def __determine_one_coords(self):
         """ Returns a list of all (i, j) entries of M that should be 1. """
         one_coords = []
-        for row_idx, row in enumerate(list(self.arc_diagram)):
-            row = [int(entry)-1 for entry in row]
+        for row_idx, row in enumerate(list(self.arc_diagram.T)):
+            row = list(row)
             row.sort()
             for idx, entry in enumerate(row):
-                one_idx = self.num_sec * (self.num_sec - row_idx - 1) + idx
-                one_coords += [(entry, one_idx)] # (row, column) of pre-transpose matrix
+                one_idx = self.nrows * (self.ncols - row_idx - 1) + idx
+                one_coords += [(entry-1, one_idx)] # (row, column) of pre-transpose matrix
         return one_coords
 
     def __gen_first_row(self):
         """ Generates the first row of the arc matrix. """
         first_row = []
-        zero_entries = [0]*(self.num_sec - 1)
-        for i in range(self.num_sec - 1):
+        zero_entries = [0]*(self.nrows - 1)
+        for i in range(self.ncols - 1):
             first_row += [var('z'+str(i))] + zero_entries
         first_row += [1] + zero_entries
-        self.var_idx += self.num_sec - 1
+        self.var_idx += self.nrows - 1
         return first_row
 
     def __determine_coord_value(self, row_idx, col_idx):
@@ -140,10 +140,9 @@ class RepnMatrix(ArcMatrix):
 
     def __make_zero_jcf_mat(self):
         """ Makes a Jordan Canoncial Form matrix J with 0's on the diagonal. """
-        O = Matrix([[0 for _ in range(self.num_sec)] for _ in range(self.num_sec)])
-        zero_vec = Matrix([[0] for _ in range(self.num_sec-1)])
-        D = Matrix([[1 if j==(i+1) else 0 for j in range(self.num_sec)] for i in range(self.num_sec)])
-        J = block_matrix([[D if j==i else O for j in range(self.num_sec)] for i in range(self.num_sec)])
+        O = Matrix([[0 for _ in range(self.nrows)] for _ in range(self.nrows)])
+        D = Matrix([[1 if j==(i+1) else 0 for j in range(self.nrows)] for i in range(self.nrows)])
+        J = block_matrix([[D if j==i else O for j in range(self.ncols)] for i in range(self.ncols)])
         return J
 
     def __make_replacement_row(self, row_idx, soln):
@@ -173,5 +172,5 @@ class RepnMatrix(ArcMatrix):
     def __repr__(self):
         """ Prints M in form of mathematical interest. """
         copy_M = copy(self.M.T)
-        copy_M.subdivide([int(self.num_sec * i) for i in range(1, self.num_sec)], None)
+        copy_M.subdivide([int(self.nrows * i) for i in range(1, self.ncols)], None)
         return str(copy_M)
