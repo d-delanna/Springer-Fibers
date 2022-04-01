@@ -5,15 +5,36 @@ class LinearSystem:
         self.vec = vector(SR, vec)
         self.soln = self.__solve_linear_system()
 
+    def __def_free_var(self, equation):
+        eqn = str(equation)
+        idx1, idx2 = eqn.index('r'), -1
+        for idx, char in enumerate(eqn[idx1+1:]):
+            if not char.isdigit():
+                idx2 = idx + idx1 + 1
+                break
+        return eqn[idx1:idx2]
+
     def __convert_soln_to_dict(self, soln):
         """ Changes soln from type(sage.symbolic.expressions) to type(dict). """
         var_dictionary = dict()
-        for equation in soln[0]:
-            try:
-                equation = str(equation).split(" == ")
-                var_dictionary[var(equation[0])] = int(equation[1])  # TODO: change to float
-            except ValueError:
-                var_dictionary[var(equation[0])] = equation[1]  # TODO: change to var
+        soln = soln[0][self.mat.ncols():][::-1]
+        # print(soln)
+        for idx1, eqn1 in enumerate(soln):
+            if 'r' in str(eqn1):
+                free_var = var(self.__def_free_var(eqn1))
+                free_var_soln = str(solve(eqn1, free_var)[0]).split(' == ')
+                free_var_soln = '('+ free_var_soln[1] +')'
+                for idx2, eqn2 in enumerate(soln[idx1+1:]):
+                    eqn2 = str(eqn2).split(" == ")
+                    while str(free_var) in eqn2[1]:
+                        eqn2[1] = eqn2[1].replace(str(free_var), free_var_soln)
+                    soln[idx2 + idx1 + 1] = var(eqn2[0]) == SR(eqn2[1])
+                eqn1 = str(eqn1).split(' == ')
+                var_dictionary[var(eqn1[0])] = var(eqn1[0])
+            else:
+                eqn1 = str(eqn1).split(' == ')
+                var_dictionary[var(eqn1[0])] = SR(eqn1[1])
+        # print(var_dictionary)
         return var_dictionary
 
     def __solve_linear_system(self):
