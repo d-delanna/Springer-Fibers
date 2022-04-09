@@ -7,7 +7,7 @@ class LinearSystem:
 
     def __def_free_var(self, equation):
         eqn = str(equation)
-        idx1, idx2 = eqn.index('r'), -1
+        idx1, idx2 = eqn.index('r'), None
         for idx, char in enumerate(eqn[idx1+1:]):
             if not char.isdigit():
                 idx2 = idx + idx1 + 1
@@ -18,7 +18,6 @@ class LinearSystem:
         """ Changes soln from type(sage.symbolic.expressions) to type(dict). """
         var_dictionary = dict()
         soln = soln[0][self.mat.ncols():][::-1]
-        # print(soln)
         for idx1, eqn1 in enumerate(soln):
             if 'r' in str(eqn1):
                 free_var = var(self.__def_free_var(eqn1))
@@ -34,7 +33,6 @@ class LinearSystem:
             else:
                 eqn1 = str(eqn1).split(' == ')
                 var_dictionary[var(eqn1[0])] = SR(eqn1[1])
-        # print(var_dictionary)
         return var_dictionary
 
     def __solve_linear_system(self):
