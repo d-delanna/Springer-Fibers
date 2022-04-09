@@ -1,0 +1,20 @@
+if __name__ == '__main__':
+    word = 'bbmtmt'
+    diagram = ArcDiagram(word).arc_diagram
+    print('\n'+str(word)+'\n'+str(diagram)+'\n')
+    print(RepnMatrix(diagram))
+    
+
+[OUTPUT]:
+
+bbmtmt
+[[1, 5, 6], [2, 3, 4]]
+
+[z0 z2 z6  1  0  0]
+[ 0 z0  0  0 z8  1]
+[-----------------]
+[z1 z4  1  0  0  0]
+[ 0 z1  0  0  1  0]
+[-----------------]
+[ 1  0  0  0  0  0]
+[ 0  1  0  0  0  0]
