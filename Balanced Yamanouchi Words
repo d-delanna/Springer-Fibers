@@ -1,8 +1,8 @@
-word_bank_2 = [
+word_2_3 = [
     'bbmmtt', 'bmtbmt', 'bmbmtt', 'bmbtmt'
 ]
 
-word_bank_3 = [   
+word_3_3 = [   
     'bbbmmmttt','bbbmmtmtt','bbbmtmmtt','bbbmtmtmt','bbbmmttmt',
     'bbmmbmttt','bbmmttbmt','bbmmbttmt','bbmmbtmtt','bbmmtbmtt',
     'bbmmtbtmt','bbmbmtmtt','bbmbmttmt','bbmbtmmtt','bbmbtmtmt',
